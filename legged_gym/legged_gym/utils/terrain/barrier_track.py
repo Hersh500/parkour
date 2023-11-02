@@ -698,7 +698,7 @@ class BarrierTrack:
                 torch.zeros_like(track_idx[0]),
                 torch.tensor([self.cfg.num_rows-1, self.cfg.num_cols-1], dtype= int, device= self.device),
             )
-        return track_idx
+        return track_idx.int()
 
     def get_stepping_obstacle_info(self, positions):
         """ Different from `engaging`..., this method extracts the obstacle id where the point is
@@ -713,7 +713,7 @@ class BarrierTrack:
             block_idx,
             0.,
             (self.n_blocks_per_track - 1),
-        )
+        ).to(int)
         in_track_mask = (track_idx == track_idx_clipped).all(dim= -1) & (block_idx == block_idx_clipped)
         in_block_distance = forward_distance % self.env_block_length
         obstacle_info = self.track_info_map[
@@ -739,7 +739,7 @@ class BarrierTrack:
             block_idx,
             0.,
             (self.n_blocks_per_track - 1),
-        )
+        ).to(int)
 
         # compute whether the robot is still in any of the track
         in_track_mask = (track_idx == track_idx_clipped).all(dim= -1) & (block_idx == block_idx_clipped)
